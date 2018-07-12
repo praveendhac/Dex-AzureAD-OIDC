@@ -1,7 +1,7 @@
 # Dex-AzureAD-OIDC
 Core OS Dex to Azure AD connection
 
-Build dex binary and dex-authenticator app
+* Build dex binary and dex-authenticator app
 ```
 $ git clone https://github.com/coreos/dex.git
 $ cd dex
@@ -12,7 +12,7 @@ Binaries are present in
 $ ls dex/bin/
 dex		example-app	grpc-client
 ```
-Start Dex Server
+* Start Dex Server
 /bin/dex serve config-microsoft.yaml
 From dex repo, 
 ```
@@ -27,21 +27,22 @@ time="2018-07-12T22:26:47Z" level=info msg="keys rotated, next rotation: 2018-07
 time="2018-07-12T22:26:47Z" level=info msg="listening (http/telemetry) on 0.0.0.0:5558"
 time="2018-07-12T22:26:47Z" level=info msg="listening (http) on 0.0.0.0:5556"
 ```
-Start Dex Authenticator
+* Start Dex Authenticator
 ./bin/example-app --debug
 
-Browse through http://127.0.0.1:5555
-Click on Login button (redirects to http://127.0.0.1:5556/dex/auth?client_id=example-app&redirect_uri=http%3A%2F%2F127.0.0.1%3A5555%2Fcallback&response_type=code&scope=openid+profile+email+offline_access&state=I+wish+to+wash+my+irish+wristwatch) 
+* Browse through http://127.0.0.1:5555
 
-Click on "Log in with Microsoft" button (redirects to https://login.microsoftonline.com/configured_tenant_id/oauth2/v2.0/authorize?client_id=configured_client_id&redirect_uri=http%3A%2F%2F127.0.0.1%3A5556%2Fdex%2Fcallback&response_type=code&scope=user.read&state=ewwkc32kwsedxuy7d22bcrs3t)
+* Click on Login button (redirects to http://127.0.0.1:5556/dex/auth?client_id=example-app&redirect_uri=http%3A%2F%2F127.0.0.1%3A5555%2Fcallback&response_type=code&scope=openid+profile+email+offline_access&state=I+wish+to+wash+my+irish+wristwatch) 
 
-Enter your AzureAD credentials
+* Click on "Log in with Microsoft" button (redirects to https://login.microsoftonline.com/configured_tenant_id/oauth2/v2.0/authorize?client_id=configured_client_id&redirect_uri=http%3A%2F%2F127.0.0.1%3A5556%2Fdex%2Fcallback&response_type=code&scope=user.read&state=ewwkc32kwsedxuy7d22bcrs3t)
+
+* Enter your AzureAD credentials
 
 If the credentials are correct we will be redirected to http://127.0.0.1:5556/dex/approval?req=v6zh7pncphriiuvet3syfvxtp
 
 dex_grant_access
 
-Click on "Grant Access" button (http://127.0.0.1:5555/callback?code=rh5lqa7pelndskimecqjviv7g&state=I+wish+to+wash+my+irish+wristwatch)
+* Click on "Grant Access" button (http://127.0.0.1:5555/callback?code=rh5lqa7pelndskimecqjviv7g&state=I+wish+to+wash+my+irish+wristwatch)
 Response has below details confirming working of OIDC
 ```
 Token:
@@ -65,7 +66,7 @@ Refresh Token:
 ChlkZHDjcXJuaTYPzNWZsdHRhaXYzA3RlYTRsEhV3b20zbzZ5EDNnZHlvaENqcHFxZmF6aNo1
 
 ```
-##Errors
+## Errors
 Error1:
 time="2018-07-12T13:06:22Z" level=error msg="Connector \"microsoft\" returned error when creating callback: expected callback URL \"http://127.0.0.1:5556/dex/callback\" did not match the URL in the config \"https://dex.praveend.com/callback\""
 FIX: Make sure redirectURL in config-microsoft.yaml and "Reply URLs" in AzureAD App registrations are same. Use HTTPS, http is not supported 
@@ -80,11 +81,11 @@ URL which threw above error
 https://login.microsoftonline.com/configured_tenant_id/oauth2/v2.0/authorize?client_id=configured_client_id&redirect_uri=http%3A%2F%2F127.0.0.1%3A5556%2Fdex%2Fcallback&response_type=code&scope=user.read&state=x3cqx2k36zltpi5zjnkirldlf
 FIX: Add http://127.0.0.1:5556/dex/callback to "Reply URLs" in AzureAD App registrations
 
-##Debugging
+## Debugging
 If the dex configuration is correct, accessing below URL should return 200 containing key-value pairs which provide details about the OpenID Connect provider's configuration, including the URIs of the authorization, token, userinfo, and public-keys endpoints. URL is of the form issuer_url + "/.well-known/openid-configuration"
 http://127.0.0.1:5556/dex/.well-known/openid-configuration
 
-##Refer
+## Refer
 https://github.com/coreos/dex/blob/master/Documentation/getting-started.md
 https://github.com/coreos/dex/blob/master/Documentation/connectors/microsoft.md
 http://openid.net/connect/
